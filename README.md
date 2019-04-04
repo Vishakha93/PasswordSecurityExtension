@@ -16,7 +16,7 @@ Chrome Plugin to avoid reuse of passwords
 
 ************************************************** WHAT WE HAVE PLANNED *********************************************
 
-Tasks:
+## Tasks:
 
 1. Framework for common functionalities accross all three sub tasks of the project : Needs contribution from everyone
     * Database storage and retrieval  
@@ -33,17 +33,29 @@ Tasks:
               
 3. Figuring out chrome permissions to access the current page and to figure out how are we going to catch the event just before user signs-in -> NEEDS DISCUSSION
 
-Division of work: 
+## Division of work: 
 
-1) Detect Password Reuse : Vishakha
-2) Detect the entering of the passwords on the wrong website : Mitesh
-3) Modify link-clicking behaviour : Divyam
+1. Detect Password Reuse : Vishakha
+2. Detect the entering of the passwords on the wrong website : Mitesh
+3. Modify link-clicking behaviour : Divyam
 
 Since Vishakha and Mitesh have experience on Frontend -> Working on tasks 1 & 2
 Divyam will explore the Frontend tech stack first : Bootstrap, jQuery and AJAX and then task 3.
 
-Thinking Points
+## Questions
 
-1. On visitng a website, how to figure out the login box - User Box and Password ?
-2. How to display relevant existing password credential to users? - Just like Chrome dropdown on Citi
+1. On visitng a website, how to detect a new login form filling? 
+2. On visiting a website, how to detect the login box - User Box and Password Box ?
+2. Should we display relevant existing password credential to users? - Just like Chrome dropdown on Citi
+3. Should we show dialog box on Password Change ? Is the feature in scope?
+
+
+## UI Components
+
+1. On plugin click, Show Basic Details About Plugin
+2. When a user fills a new login form and uses already used password, show a dialog blox warning user that existing password is being reused - Task 1
+3. On entering a different website's password, warn user that they already have this password - Task 2
+4. On links other than Alexa 10K websites, show dialog box to warn users and save settings (For once or For all) - Task 3
+5. On password change (successful or unsuccessful), show a dialog box asking whether to update the password?
+
 
