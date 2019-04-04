@@ -1,6 +1,8 @@
+********************************************** WHAT WE HAVE ************************************************************
 # PasswordSecurityPlugin
 Chrome Plugin to avoid reuse of passwords
 
+A simple plugin which opens a form on click of new tab.
 To use the code :
 
 1) Download the files in a directory
@@ -8,7 +10,7 @@ To use the code :
 3) Click Load unpacked extension and select the directory in which your extension files live.
 4) Test it by clicking a new tab.
 
-
+************************************************** WHAT WE HAVE PLANNED *************************************************
 
 Tasks:
 
