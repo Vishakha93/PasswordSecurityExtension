@@ -39,16 +39,12 @@ Chrome Plugin to avoid reuse of passwords
 2. Detect the entering of the passwords on the wrong website : Mitesh
 3. Modify link-clicking behaviour : Divyam
 
-Since Vishakha and Mitesh have experience on Frontend -> Working on tasks 1 & 2
-Divyam will explore the Frontend tech stack first : Bootstrap, jQuery and AJAX and then task 3.
-
 ## Questions
 
 1. On visitng a website, how to detect a new login form filling? 
 2. On visiting a website, how to detect the login box - User Box and Password Box ?
 2. Should we display relevant existing password credential to users? - Just like Chrome dropdown on Citi
 3. Should we show dialog box on Password Change ? Is the feature in scope?
-
 
 ## UI Components
 
@@ -58,4 +54,8 @@ Divyam will explore the Frontend tech stack first : Bootstrap, jQuery and AJAX a
 4. On links other than Alexa 10K websites, show dialog box to warn users and save settings (For once or For all) - Task 3
 5. On password change (successful or unsuccessful), show a dialog box asking whether to update the password?
 
+## Thinking about security!
 
+1. Can we make the source code of extension inaccessible by others.
+2. Our mechanism should be secure even if an attacker can look into the source code of extensions. (encryption versus hashes)
+3. How do we stop an attacker/other extensions from accessing credentials. (other extensions can get password from common storage api by using the same key)
