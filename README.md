@@ -39,5 +39,5 @@ Division of work:
 2) Detect the entering of the passwords on the wrong website : Mitesh
 3) Modify link-clicking behaviour : Divyam
 
-Since Vishakha and Mitesh having experience on Frontend -> Working on tasks 1 & 2
+Since Vishakha and Mitesh have experience on Frontend -> Working on tasks 1 & 2
 Divyam will explore the Frontend tech stack first : Bootstrap, jQuery and AJAX and then task 3.
