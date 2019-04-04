@@ -1,5 +1,5 @@
 ********************************************** WHAT WE HAVE ************************************************************
-# PasswordSecurityPlugin
+# Password Security Plugin
 Chrome Plugin to avoid reuse of passwords
 
 * A simple plugin which opens a form on click of new tab.
