@@ -1,5 +1,8 @@
-# PasswordSecurityPlugin
-Chrome Plugin to avoid reuse of passwords
+# Color Change Plugin
+
+1. Color change plugin created using Chrome Extension Getting Started Tutorial - https://developers.chrome.com/extensions/getstarted
+
+2. Enhanced the plugin to include a form. Data is persisted and retrieved using chrome storage API.
 
 To use the code :
 
