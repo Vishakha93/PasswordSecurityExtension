@@ -10,7 +10,7 @@ To use the code :
 3) Click Load unpacked extension and select the directory in which your extension files live.
 4) Test it by clicking a new tab.
 
-************************************************** WHAT WE HAVE PLANNED *************************************************
+************************************************** WHAT WE HAVE PLANNED *********************************************
 
 Tasks:
 
