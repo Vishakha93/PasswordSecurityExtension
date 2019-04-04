@@ -10,7 +10,10 @@ Chrome Plugin to avoid reuse of passwords
    3) Click Load unpacked extension and select the directory in which your extension files live.
    4) Test it by clicking a new tab.
 
-* One more plugin to test the ret
+* Color change plugin created to perform basic saving and retrieval to/from the DB. https://developers.chrome.com/extensions/getstarted                                 
+
+   Enhanced the plugin to include a form. Data is persisted and retrieved using chrome storage API.
+
 ************************************************** WHAT WE HAVE PLANNED *********************************************
 
 Tasks:
