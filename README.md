@@ -41,3 +41,9 @@ Division of work:
 
 Since Vishakha and Mitesh have experience on Frontend -> Working on tasks 1 & 2
 Divyam will explore the Frontend tech stack first : Bootstrap, jQuery and AJAX and then task 3.
+
+Thinking Points
+
+1. On visitng a website, how to figure out the login box - User Box and Password ?
+2. How to display relevant existing password credential to users?
+
