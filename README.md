@@ -59,3 +59,9 @@ Chrome Plugin to avoid reuse of passwords
 1. Can we make the source code of extension inaccessible by others.
 2. Our mechanism should be secure even if an attacker can look into the source code of extensions. (encryption versus hashes)
 3. How do we stop an attacker/other extensions from accessing credentials. (other extensions can get password from common storage api by using the same key)
+
+
+
+## Development Steps
+
+`git clone --single-branch --branch master-dev https://github.com/Vishakha93/PasswordSecurityPlugin.git`
