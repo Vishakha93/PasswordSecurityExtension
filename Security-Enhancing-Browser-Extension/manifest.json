@@ -13,7 +13,7 @@
   {
   "run_at": "document_end",
   "matches": ["<all_urls>"],
-  "js": ["contentScript.js"]
+  "js": ["thirdparty/jquery.min.js", "contentScript.js"]
   }
 ], 
 
@@ -34,5 +34,6 @@
       "48": "images/get_started48.png",
       "128": "images/get_started128.png"
     },
- "permissions": ["activeTab", "tabs", "declarativeContent", "storage"]
+ "permissions": ["activeTab", "tabs", "declarativeContent", "storage"],
+ "web_accessible_resources": ["modal.html", "thirdparty/jquery.min.js"]
 }

@@ -8,7 +8,12 @@ function storeUrlAndPassword(url, password)
 		
 		chrome.storage.local.set({enigmaPlugin: enigmaPlugin}, function () {
 			chrome.storage.local.get('enigmaPlugin', function (result2) {
-				alert(JSON.stringify(result2.enigmaPlugin));
+
+				//alert(JSON.stringify(result2.enigmaPlugin));
+				document.getElementById("modalHeader").innerHTML = "Password Reuse Warning";
+				document.getElementById("modalBody").innerHTML = "<h2>You reused a password</h2><h2>Please fix</h2><<h2>Please fix</h2>";
+				document.getElementById("myBtn").click();
+
 			});
 		});
 	});
@@ -33,6 +38,11 @@ function interceptSubmitEvent()
 }
 
 chrome.storage.local.clear(function() {
+});
+
+
+$.get(chrome.extension.getURL("modal.html"), function(data) {
+	$(data).appendTo('body');
 });
 
 interceptSubmitEvent();
