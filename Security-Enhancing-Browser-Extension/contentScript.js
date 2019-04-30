@@ -37,15 +37,53 @@ function interceptSubmitEvent()
 	}
 }
 
-chrome.storage.local.clear(function() {
-});
+function comparePasswords(result, password)
+{
+	len = result.enigmaPlugin.length;
+	for(i = 0; i < len; i++)
+	{
+		if(result.enigmaPlugin[i].password === password)
+		{
+			alert("SAME PASSWORD USED");
+		}
+	}
+}
+
+
+function interceptUserInput()
+{
+	passwordElem = document.querySelector("input[type=\'password\']");
+	if(passwordElem)
+		password = passwordElem.value;
+	chrome.storage.local.get({ enigmaPlugin: []}, function (result) {
+		//check passwords
+		comparePasswords(result, password);
+	});
+}
+
+// chrome.storage.local.clear(function() {
+// });
 
 
 $.get(chrome.extension.getURL("modal.html"), function(data) {
 	$(data).appendTo('body');
 });
 
-interceptSubmitEvent();
+passwordElem = document.querySelector("input[type=\'password\']");
+submitBtn = document.querySelector('input[type=\'submit\'], button[type=\'submit\']');
+
+window.addEventListener('load',function(){
+	if(submitBtn)
+	{
+		submitBtn.onclick = interceptPassword;
+	}
+
+	if(passwordElem) 
+	{
+		passwordElem.oninput = interceptUserInput;
+	}
+});
+
 
 
 /* 
