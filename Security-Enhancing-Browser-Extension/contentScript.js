@@ -192,6 +192,63 @@ window.addEventListener('load',function(){
 	}
 });
 
+
+/************** Alexa-10k support ******************/
+
+function extractHostname(url) {
+    var hostname;
+    //find & remove protocol (http, ftp, etc.) and get hostname
+
+    if (url.indexOf("//") > -1) {
+        hostname = url.split('/')[2];
+    }
+    else {
+        hostname = url.split('/')[0];
+    }
+
+    //find & remove port number
+    hostname = hostname.split(':')[0];
+    //find & remove "?"
+    hostname = hostname.split('?')[0];
+
+    return hostname;
+}
+
+function interceptClickEvent() 
+{
+
+// 	document.addEventListener('click', function (event) {
+
+// 	// If the clicked element doesn't have the right selector, bail
+// 	// if (!event.target.matches('.click-me')) return;
+
+// 	// Don't follow the link
+// 	alert("Website Doesn't belong to 10k");
+// 	event.preventDefault();
+
+// 	// Log the clicked element in the console
+// 	console.log(event.target);
+
+// }, false);
+
+	var anchors = document.getElementsByTagName("a");
+	for (var i = 0, length = anchors.length; i < length; i++) {
+	  	var anchor = anchors[i];
+	  	var hostname;
+	  	anchor.addEventListener('click', function(event) {
+	    	// `this` refers to the anchor tag that's been clicked
+	    	hostname = extractHostname(this.getAttribute('href'));
+	    	event.preventDefault();
+	    	alert(hostname + " doesn't belong to Alexa 10k websites\n");
+    		// Log the clicked element in the console
+			console.log(event.target);
+	  	}, true);
+	};
+}
+
+interceptClickEvent();
+
+
  //chrome.storage.local.clear(function() {
  //});
 
