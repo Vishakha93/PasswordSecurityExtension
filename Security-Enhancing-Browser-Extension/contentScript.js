@@ -210,11 +210,13 @@ function extractHostname(url) {
     hostname = hostname.split(':')[0];
     //find & remove "?"
     hostname = hostname.split('?')[0];
-
+    console.log(hostname);
+    hostname = hostname.replace('www.','');
+    console.log(hostname);
     return hostname;
 }
 
-function interceptClickEvent() 
+function interceptClickEvent(json) 
 {
 
 // 	document.addEventListener('click', function (event) {
@@ -238,15 +240,31 @@ function interceptClickEvent()
 	  	anchor.addEventListener('click', function(event) {
 	    	// `this` refers to the anchor tag that's been clicked
 	    	hostname = extractHostname(this.getAttribute('href'));
-	    	event.preventDefault();
-	    	alert(hostname + " doesn't belong to Alexa 10k websites\n");
+	    	flag = 1;
+	    	for(var j = 0; j < 10000; j++)
+	    	{
+	    		if(hostname == json[j])
+	    			flag = 0;
+	    	}
+	    	if(flag)
+	    	{
+	    		event.preventDefault();
+	    		alert(hostname + " doesn't belong to Alexa 10k websites\n");
+	    	}
     		// Log the clicked element in the console
 			console.log(event.target);
 	  	}, true);
 	};
 }
 
-interceptClickEvent();
+
+
+const url = chrome.runtime.getURL('alexa_10k.json');
+
+fetch(url)
+    .then((response) => response.json()) //assuming file contains json
+    .then((json) => interceptClickEvent(json));
+
 
 
  //chrome.storage.local.clear(function() {

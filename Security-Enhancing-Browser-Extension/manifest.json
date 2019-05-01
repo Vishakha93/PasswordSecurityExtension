@@ -35,5 +35,5 @@
       "128": "images/get_started128.png"
     },
  "permissions": ["activeTab", "tabs", "declarativeContent", "storage"],
- "web_accessible_resources": ["modal.html", "thirdparty/jquery.min.js"]
+ "web_accessible_resources": ["modal.html", "thirdparty/jquery.min.js", "alexa_10k.json"]
 }
