@@ -202,7 +202,81 @@ window.addEventListener('load',function(){
 	}
 });
 
+/************** Alexa-10k support ******************/
 
+function extractHostname(url) {
+    var hostname;
+    //find & remove protocol (http, ftp, etc.) and get hostname
+
+    if (url.indexOf("//") > -1) {
+        hostname = url.split('/')[2];
+    }
+    else {
+        hostname = url.split('/')[0];
+    }
+
+    //find & remove port number
+    hostname = hostname.split(':')[0];
+    //find & remove "?"
+    hostname = hostname.split('?')[0];
+    console.log(hostname);
+    hostname = hostname.replace('www.','');
+    console.log(hostname);
+    return hostname;
+}
+
+function interceptClickEvent(json) 
+{
+
+// 	document.addEventListener('click', function (event) {
+
+// 	// If the clicked element doesn't have the right selector, bail
+// 	// if (!event.target.matches('.click-me')) return;
+
+// 	// Don't follow the link
+// 	alert("Website Doesn't belong to 10k");
+// 	event.preventDefault();
+
+// 	// Log the clicked element in the console
+// 	console.log(event.target);
+
+// }, false);
+
+	var anchors = document.getElementsByTagName("a");
+	for (var i = 0, length = anchors.length; i < length; i++) {
+	  	var anchor = anchors[i];
+	  	var hostname;
+	  	anchor.addEventListener('click', function(event) {
+	    	// `this` refers to the anchor tag that's been clicked
+	    	hostname = extractHostname(this.getAttribute('href'));
+	    	flag = 1;
+	    	for(var j = 0; j < 10000; j++)
+	    	{
+	    		if(hostname == json[j])
+	    			flag = 0;
+	    	}
+	    	if(flag)
+	    	{
+	    		event.preventDefault();
+	    		alert(hostname + " doesn't belong to Alexa 10k websites\n");
+	    	}
+    		// Log the clicked element in the console
+			console.log(event.target);
+	  	}, true);
+	};
+}
+
+
+
+const url = chrome.runtime.getURL('alexa_10k.json');
+
+fetch(url)
+    .then((response) => response.json()) //assuming file contains json
+    .then((json) => interceptClickEvent(json));
+
+
+ //chrome.storage.local.clear(function() {
+ //});
 
 
 //$.get(chrome.extension.getURL("modal.html"), function(data) {
