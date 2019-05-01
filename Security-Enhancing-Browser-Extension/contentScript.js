@@ -175,25 +175,32 @@ function interceptUserInput()
 	}
 }
 
+function addSubmitEventListener(passwordElem) {
+
+	//Only that submit button should have on-click event which belong to the password form
+	let closestFormElement = passwordElem.closest('form');
+	let submitBtn = closestFormElement.querySelector('input[type=\'submit\'], button[type=\'submit\']');
+	if(submitBtn) {
+		submitBtn.onclick = interceptPassword;
+	}
+}
+
+function isHidden(el) {
+    var style = window.getComputedStyle(el);
+    return (style.display === 'none')
+}
 
 //TODO: Many webpages show the login/signup forms dynamically. The form is not there when page loads.
 //It gets added after some times
 //Ex. Instagram
 window.addEventListener('load',function(){
-
-	let submitBtn = document.querySelector('input[type=\'submit\'], button[type=\'submit\']');
-	if(submitBtn) {
-		submitBtn.onclick = interceptPassword;
-	}
-
 	let passwordElem = document.querySelector("input[type=\'password\']");
-	if(passwordElem) {
+
+	if(passwordElem && !isHidden(passwordElem)) {
 		passwordElem.oninput = interceptUserInput;
+		addSubmitEventListener(passwordElem);
 	}
 });
-
- //chrome.storage.local.clear(function() {
- //});
 
 
 
