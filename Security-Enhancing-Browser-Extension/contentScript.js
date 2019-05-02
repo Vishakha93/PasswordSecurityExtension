@@ -161,7 +161,7 @@ function getFormType(formElement)
 
 function interceptUserInput()
 {
-	passwordElem = document.querySelector("input[type=\'password\']");
+	passwordElem = this;
 	if(passwordElem && passwordElem.value) {
 
 		let closestFormElement = passwordElem.closest('form');
@@ -180,28 +180,33 @@ function addSubmitEventListener(passwordElem) {
 	//Only that submit button should have on-click event which belong to the password form
 	let closestFormElement = passwordElem.closest('form');
 	let submitBtn = closestFormElement.querySelector('input[type=\'submit\'], button[type=\'submit\']');
-	if(submitBtn) {
+	if(submitBtn && !submitBtn.onclick) {
 		submitBtn.onclick = interceptPassword;
 	}
 }
 
-function isHidden(el) {
-    var style = window.getComputedStyle(el);
-    return (style.display === 'none')
-}
 
-//TODO: Many webpages show the login/signup forms dynamically. The form is not there when page loads.
-//It gets added after some times
-//Ex. Instagram
-window.addEventListener('load',function(){
-	let passwordElem = document.querySelector("input[type=\'password\']");
 
-	if(passwordElem && !isHidden(passwordElem)) {
+function addListenerOnPasswordAndSubmitElements(passwordElem) {
+	if(passwordElem && !passwordElem.oninput) {
 		passwordElem.oninput = interceptUserInput;
 		addSubmitEventListener(passwordElem);
 	}
-});
+}
+//TODO: Many webpages show the login/signup forms dynamically. The form is not there when page loads.
+//It gets added after some times
+//Ex. Instagram
+/*window.addEventListener('load',function(){
+	addListenerOnPasswordAndSubmitElements();
+});*/
 
+
+document.addEventListener("input", function(event){
+	console.log(event.target.type);
+	if(event.target.type === 'password') {
+		addListenerOnPasswordAndSubmitElements(event.target);
+	}
+});
 /************** Alexa-10k support ******************/
 
 function extractHostname(url) {
