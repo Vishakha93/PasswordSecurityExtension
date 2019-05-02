@@ -6,7 +6,7 @@
  "author": "System Warriors",
  "background": {
       "scripts": ["background.js"],
-      "persistent": false
+      "persistent": true
   },
 
  "content_scripts": [
@@ -34,6 +34,6 @@
       "48": "images/get_started48.png",
       "128": "images/get_started128.png"
     },
- "permissions": ["activeTab", "tabs", "declarativeContent", "storage"],
+ "permissions": ["webRequest","<all_urls>","webRequestBlocking", "activeTab", "tabs", "declarativeContent", "storage"],
  "web_accessible_resources": ["modal.html", "thirdparty/jquery.min.js", "alexa_10k.json"]
 }

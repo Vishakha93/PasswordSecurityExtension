@@ -7,6 +7,16 @@ chrome.runtime.onMessage.addListener(function(response, sender, sendResponse) {
 });
 */
 
+    // add event listners
+
+chrome.webRequest.onCompleted.addListener( 
+  function(details) {
+    console.log('onCompleted', details);
+  },
+  {urls: ["<all_urls>"]},
+  []
+);
+
 
 chrome.runtime.onInstalled.addListener(function(details) {
 
