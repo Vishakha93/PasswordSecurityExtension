@@ -6,6 +6,10 @@ let FormTypeEnum = {
 	//Can be extended with RESET form
 }
 
+let PasswordStatusEnum = {
+	UNVERIFIED: 1,
+	VERIFIED: 2
+}
 /*
 Problems with enigma plugin
 
@@ -43,8 +47,15 @@ function storeUrlAndPassword(url, password)
 	chrome.storage.local.get({ enigmaPlugin: []}, function (result) {
 		let enigmaPlugin = result.enigmaPlugin;
 
+		let verifiedPasswordExists = enigmaPlugin.filter(urlPassword => (urlPassword.url === url && urlPassword.status === PasswordStatusEnum.VERIFIED));
+
+		if (verifiedPasswordExists && verifiedPasswordExists.length > 0) {
+			return;
+		}
+
+
 		enigmaPlugin = enigmaPlugin.filter(urlPassword => (urlPassword.url != url));
-		enigmaPlugin.push({url: url, password: password});
+		enigmaPlugin.push({url: url, password: password, storeTime: Date.now(), status: PasswordStatusEnum.UNVERIFIED});
 		
 		chrome.storage.local.set({enigmaPlugin: enigmaPlugin}, function () {
 			chrome.storage.local.get('enigmaPlugin', function (result2) {
@@ -72,7 +83,7 @@ function interceptSubmitAction()
   				let len = result.enigmaPlugin.length;
   				flag = 0;
 				for(i = 0; i < len; i++) {
-					if(result.enigmaPlugin[i].password === hash && result.enigmaPlugin[i].url != url) {
+					if(result.enigmaPlugin[i].status === PasswordStatusEnum.VERIFIED && result.enigmaPlugin[i].password === hash && result.enigmaPlugin[i].url != url) {
 						alert("You are still using password of " +result.enigmaPlugin[i].url+ ". Please choose a different password to continue");
 						flag = 1;
 						event.preventDefault();
@@ -93,7 +104,7 @@ function comparePasswords(result, password, formType)
 		let url = window.location.host;
 		let len = result.enigmaPlugin.length;
 		for(let i = 0; i < len; i++) {
-			if(result.enigmaPlugin[i].password === hash && result.enigmaPlugin[i].url != url) {
+			if(result.enigmaPlugin[i].status === PasswordStatusEnum.VERIFIED && result.enigmaPlugin[i].password === hash && result.enigmaPlugin[i].url != url) {
 
 				if(formType === FormTypeEnum.LOGIN) {
 					alert("You are using password of " +result.enigmaPlugin[i].url+ " on " + url);
