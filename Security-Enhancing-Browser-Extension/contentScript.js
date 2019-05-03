@@ -70,14 +70,17 @@ function interceptSubmitAction()
   			let hash = hexString(digestValue);
   			chrome.storage.local.get({ enigmaPlugin: []}, function (result) {
   				let len = result.enigmaPlugin.length;
+  				flag = 0;
 				for(i = 0; i < len; i++) {
 					if(result.enigmaPlugin[i].password === hash && result.enigmaPlugin[i].url != url) {
 						alert("You are still using password of " +result.enigmaPlugin[i].url+ ". Please choose a different password to continue");
+						flag = 1;
 						event.preventDefault();
 					}
 				}
+				if(flag == 0)
+					storeUrlAndPassword(url, hash);
 			});
-  			storeUrlAndPassword(url, hash);
 		});	
 	}
 }
