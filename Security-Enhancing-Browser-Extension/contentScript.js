@@ -245,6 +245,7 @@ document.addEventListener("input", function(event){
 		addListenerOnPasswordAndSubmitElements(event.target);
 	}
 });
+
 /************** Alexa-10k support ******************/
 
 function extractHostname(url) {
@@ -268,48 +269,80 @@ function extractHostname(url) {
     return hostname;
 }
 
-function interceptClickEvent(json) 
+function storeUrl(url)
 {
+	chrome.storage.local.get({ enigmaExtension_urls: []}, function (result) {
+		let whitelist = result.enigmaExtension_urls;
+		whitelist.push(url);
+		let url_set = new Set(whitelist);
+		whitelist = [...url_set];
+		
+		chrome.storage.local.set({'enigmaExtension_urls': whitelist}, function () {
+			chrome.storage.local.get('enigmaExtension_urls', function (result2) {
+				alert(result2.enigmaExtension_urls);
+			});
 
-// 	document.addEventListener('click', function (event) {
-
-// 	// If the clicked element doesn't have the right selector, bail
-// 	// if (!event.target.matches('.click-me')) return;
-
-// 	// Don't follow the link
-// 	alert("Website Doesn't belong to 10k");
-// 	event.preventDefault();
-
-// 	// Log the clicked element in the console
-// 	console.log(event.target);
-
-// }, false);
-
-	var anchors = document.getElementsByTagName("a");
-	for (var i = 0, length = anchors.length; i < length; i++) {
-	  	var anchor = anchors[i];
-	  	var hostname;
-	  	anchor.addEventListener('click', function(event) {
-	    	// `this` refers to the anchor tag that's been clicked
-	    	hostname = extractHostname(this.getAttribute('href'));
-	    	flag = 1;
-	    	for(var j = 0; j < 10000; j++)
-	    	{
-	    		if(hostname == json[j])
-	    			flag = 0;
-	    	}
-	    	if(flag)
-	    	{
-	    		event.preventDefault();
-	    		alert(hostname + " doesn't belong to Alexa 10k websites\n");
-	    	}
-    		// Log the clicked element in the console
-			console.log(event.target);
-	  	}, true);
-	};
+		});
+	});
 }
 
+function matchHostnames(hostname, domain)
+{
+	if (hostname.endsWith(domain))
+		return true;
+	else
+		return false;
+}
 
+function interceptClickEvent(json) 
+{
+	var anchors = document.getElementsByTagName("a");
+	var filename = "alexa_10k.json";
+	chrome.storage.local.get({ enigmaExtension_urls: []}, function (result) {
+		var whitelist = result.enigmaExtension_urls;
+		for (var i = 0, length = anchors.length; i < length; i++) {
+		  	var anchor = anchors[i];
+		  	var hostname;
+		  	var size;
+		  	anchor.addEventListener('click', function(event) {
+		    	// `this` refers to the anchor tag that's been clicked
+		    	hostname = extractHostname(this.href);
+		    	flag = 1;
+		    	size = Object.keys(json).length;
+		    	for(var j = 0; j < size; j++)
+		    	{
+		    		if(matchHostnames(hostname, json[j]))
+		    			flag = 0;
+		    	}
+		    	// check if hostname is present in whitelist  
+		    	if (flag && whitelist != null)
+		    	{
+		    		for(var k = 0; k < whitelist.length; k++)
+		    		{
+		    			if(matchHostnames(hostname, whitelist[k]))
+		    				flag = 0;		
+		    		}
+		    	}
+		    	if (flag)
+		    	{
+		    		if (confirm(hostname + " doesn't belong to Alexa 10k websites!!!\nContinue to website?"))
+		    		{
+		    			if (confirm("Add " + hostname + " to list of safe sites?"))
+		    			{
+							storeUrl(hostname);
+		    			}
+		    		}
+		    		else
+		    		{
+			    		event.preventDefault();
+		    		}
+		    	}
+	    		// Log the clicked element in the console
+				console.log(event.target);
+		  	}, true);
+		};
+	});
+}
 
 const url = chrome.runtime.getURL('alexa_10k.json');
 
