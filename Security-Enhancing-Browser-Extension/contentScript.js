@@ -70,30 +70,44 @@ function storeUrlAndPassword(url, password)
 	});
 }
 
-function interceptSubmitAction() 
-{	
-	let passwordElem = this.closest('form').querySelector("input[type=\'password\']");
-	if (passwordElem){
+async function isPasswordValid(passwordElem)
+{
+	flag = 0;
+	if (passwordElem)
+	{
 		let url = window.location.host;
 		let password = passwordElem.value;
 		let event = window.event;
-		getMessageHash(password).then(digestValue => {
-  			let hash = hexString(digestValue);
-  			chrome.storage.local.get({ enigmaPlugin: []}, function (result) {
-  				let len = result.enigmaPlugin.length;
-  				flag = 0;
-				for(i = 0; i < len; i++) {
-					if(result.enigmaPlugin[i].status === PasswordStatusEnum.VERIFIED && result.enigmaPlugin[i].password === hash && result.enigmaPlugin[i].url != url) {
-						alert("You are still using password of " +result.enigmaPlugin[i].url+ ". Please choose a different password to continue");
-						flag = 1;
-						event.preventDefault();
-					}
-				}
-				if(flag == 0)
-					storeUrlAndPassword(url, hash);
-			});
-		});	
+		const digestValue = await getMessageHash(password);
+		console.log(digestValue);
+		// getMessageHash(password).then(digestValue => {
+		let hash = hexString(digestValue);
+		window.url = url;
+		window.hash = hash;
+		let result = window.result;
+  		let len = result.enigmaPlugin.length;
+		for(i = 0; i < len; i++) 
+		{
+			if(result.enigmaPlugin[i].password === hash && result.enigmaPlugin[i].url != url)
+			{
+				alert("You are still using password of " +result.enigmaPlugin[i].url+ ". Please choose a different password to continue");
+				flag = 1;
+			}
+		}
 	}
+
+	return flag;
+}
+
+async function interceptSubmitAction() 
+{
+	let form = this.closest('form');
+	let passwordElem = form.querySelector("input[type=\'password\']");
+	flag = await isPasswordValid(passwordElem);
+	if(!flag)
+		storeUrlAndPassword(window.url, window.hash);
+	else
+			form.submit(false);
 }
 
 function comparePasswords(result, password, formType)
@@ -192,6 +206,7 @@ function interceptUserInput()
 
 		password = passwordElem.value;
 		chrome.storage.local.get({ enigmaPlugin: []}, function (result) {
+			window.result = result;
 			comparePasswords(result, password, formType);
 		});
 		
