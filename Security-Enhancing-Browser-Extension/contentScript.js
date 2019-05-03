@@ -59,15 +59,24 @@ function storeUrlAndPassword(url, password)
 	});
 }
 
-function interceptPassword() 
+function interceptSubmitAction() 
 {	
-	let passwordElem = document.querySelector("input[type=\'password\']");
+	let passwordElem = this.closest('form').querySelector("input[type=\'password\']");
 	if (passwordElem){
 		let url = window.location.host;
 		let password = passwordElem.value;
-
+		let event = window.event;
 		getMessageHash(password).then(digestValue => {
   			let hash = hexString(digestValue);
+  			chrome.storage.local.get({ enigmaPlugin: []}, function (result) {
+  				let len = result.enigmaPlugin.length;
+				for(i = 0; i < len; i++) {
+					if(result.enigmaPlugin[i].password === hash && result.enigmaPlugin[i].url != url) {
+						alert("You are still using password of " +result.enigmaPlugin[i].url+ ". Please choose a different password to continue");
+						event.preventDefault();
+					}
+				}
+			});
   			storeUrlAndPassword(url, hash);
 		});	
 	}
@@ -181,7 +190,7 @@ function addSubmitEventListener(passwordElem) {
 	let closestFormElement = passwordElem.closest('form');
 	let submitBtn = closestFormElement.querySelector('input[type=\'submit\'], button[type=\'submit\']');
 	if(submitBtn && !submitBtn.onclick) {
-		submitBtn.onclick = interceptPassword;
+		submitBtn.onclick = interceptSubmitAction;
 	}
 }
 
