@@ -61,9 +61,10 @@ function storeUrlAndPassword(url, password)
 	});
 }
 
-async function isPasswordValid(passwordElem)
+async function isPasswordValid()
 {
 	flag = 0;
+	let passwordElem = this.closest('form').querySelector("input[type=\'password\']");
 	if (passwordElem)
 	{
 		let url = window.location.host;
@@ -71,10 +72,8 @@ async function isPasswordValid(passwordElem)
 		let event = window.event;
 		const digestValue = await getMessageHash(password);
 		console.log(digestValue);
-		// getMessageHash(password).then(digestValue => {
+
 		let hash = hexString(digestValue);
-		window.url = url;
-		window.hash = hash;
 		let result = window.result;
   		let len = result.enigmaPlugin.length;
 		for(i = 0; i < len; i++) 
@@ -82,23 +81,23 @@ async function isPasswordValid(passwordElem)
 			if(result.enigmaPlugin[i].status === PasswordStatusEnum.VERIFIED && result.enigmaPlugin[i].password === hash && result.enigmaPlugin[i].url != url)
 			{
 				alert("You are still using password of " +result.enigmaPlugin[i].url+ ". Please choose a different password to continue");
+				passwordElem.value = '';
 				flag = 1;
 			}
 		}
 	}
 
-	return flag;
+	// return flag;
 }
 
 async function interceptSubmitAction() 
 {
 	let form = this.closest('form');
 	let passwordElem = form.querySelector("input[type=\'password\']");
-	flag = await isPasswordValid(passwordElem);
-	if(!flag)
-		storeUrlAndPassword(window.url, window.hash);
-	else
-			form.submit(false);
+	let url = window.location.host;
+	const digestValue = await getMessageHash(passwordElem.value);
+	let hash = hexString(digestValue);
+	storeUrlAndPassword(url, hash);
 }
 
 function comparePasswords(result, password, formType)
@@ -211,6 +210,7 @@ function addSubmitEventListener(passwordElem) {
 	let submitBtn = closestFormElement.querySelector('input[type=\'submit\'], button[type=\'submit\']');
 	if(submitBtn && !submitBtn.onclick) {
 		submitBtn.onclick = interceptSubmitAction;
+		submitBtn.onmouseover = isPasswordValid;
 	}
 }
 
