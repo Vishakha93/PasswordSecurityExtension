@@ -51,7 +51,7 @@ chrome.webNavigation.onCommitted.addListener(function (details) {
 
     let NAVIGATE_TIME_IN_MILLIS = 600000;
     console.log(details);
-    if(details.frameId === 0 && details.transitionType === 'form_submit') {
+    if(details.frameId === 0 && (details.transitionType === 'form_submit' || details.transitionType === 'link')) {
 
         let hostUrl = getLocation(details.url);
         let hostName = hostUrl.hostname;
