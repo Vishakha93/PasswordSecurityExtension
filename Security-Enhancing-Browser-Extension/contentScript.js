@@ -10,6 +10,8 @@ let PasswordStatusEnum = {
 	UNVERIFIED: "UNVERIFIED",
 	VERIFIED: "VERIFIED"
 }
+
+let buttonSelector = 'input[type=\'submit\'], button[type=\'submit\'], input[type=\'button\']';
 /*
 Problems with enigma plugin
 
@@ -75,6 +77,12 @@ async function isPasswordValid()
 
 		let hash = hexString(digestValue);
 		let result = window.result;
+
+		if(!result || !result.enigmaPlugin) {
+			console.log('No content in chrome storage for enigma extension');
+			return;
+		}
+		
   		let len = result.enigmaPlugin.length;
 		for(i = 0; i < len; i++) 
 		{
@@ -125,7 +133,7 @@ function comparePasswords(result, password, formType)
 /************** Rules to determine the form type ******************/
 function getFormTypeBySubmitButtonText(formElement)
 {
-	let buttonInFormEl = formElement.querySelector('input[type=\'submit\'], button[type=\'submit\']');
+	let buttonInFormEl = formElement.querySelector(buttonSelector);
 	let text = buttonInFormEl.value + buttonInFormEl.innerText;
 	let logInText = ["log in", "sign in"];
 	for(let i=0; i < logInText.length; i++) {
@@ -135,7 +143,7 @@ function getFormTypeBySubmitButtonText(formElement)
 		}
 	}
 	
-	let signUpText = ["sign up", "create", "join"];
+	let signUpText = ["sign up", "create", "join", "register"];
 	let signUpScore = 0;
 
 	for(let i=0; i < signUpText.length; i++) {
@@ -174,6 +182,11 @@ function getFormTypeByNoOfInputFields(formElement)
 function getFormType(formElement)
 {
 	formType = getFormTypeBySubmitButtonText(formElement);
+	if(!formType) {
+		console.log("There's no form element on this page. Cannot determine form type");
+		return;
+	}
+
 	if(formType != FormTypeEnum.UNKOWN)
 		return formType;
 
@@ -207,7 +220,13 @@ function addSubmitEventListener(passwordElem) {
 
 	//Only that submit button should have on-click event which belong to the password form
 	let closestFormElement = passwordElem.closest('form');
-	let submitBtn = closestFormElement.querySelector('input[type=\'submit\'], button[type=\'submit\']');
+
+	if(!closestFormElement) {
+		console.log("There's no form element on this page. No submit event listener attached");
+		return;
+	}
+
+	let submitBtn = closestFormElement.querySelector(buttonSelector);
 	if(submitBtn && !submitBtn.onclick) {
 		submitBtn.onclick = interceptSubmitAction;
 		submitBtn.onmouseover = isPasswordValid;
