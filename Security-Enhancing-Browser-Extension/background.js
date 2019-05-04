@@ -49,7 +49,7 @@ function sortByKey(array, key) {
 
 chrome.webNavigation.onCommitted.addListener(function (details) {
 
-    let NAVIGATE_TIME_IN_MILLIS = 600000;
+    let NAVIGATE_TIME_IN_MILLIS = 60000;
     console.log(details);
     if(details.frameId === 0 && (details.transitionType === 'form_submit' || details.transitionType === 'link')) {
 
