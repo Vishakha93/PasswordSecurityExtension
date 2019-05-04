@@ -13,7 +13,7 @@
   {
   "run_at": "document_end",
   "matches": ["<all_urls>"],
-  "js": ["thirdparty/jquery.min.js", "contentScript.js"]
+  "js": ["thirdparty/jquery.min.js", "contentScript.js", "whitelist-url.js"]
   }
 ], 
 

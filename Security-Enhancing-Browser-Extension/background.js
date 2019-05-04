@@ -69,3 +69,36 @@ chrome.webNavigation.onCommitted.addListener(function (details) {
         });
     }
 })
+
+
+
+
+function loadUrls(json)
+{
+  var jsonSize = Object.keys(json).length;
+  // chrome.storage.local.get({ enigmaExtension_urls: []}, function (result) {
+    // let whitelist = result.enigmaExtension_urls;
+    let whitelist = [];
+    for(var i = 0; i < jsonSize; i++)
+    {
+      whitelist.push(json[i]);
+    }
+    let url_set = new Set(whitelist);
+    whitelist = [...url_set];
+    chrome.storage.local.set({'enigmaExtension_urls': whitelist}, function () {
+    // chrome.storage.local.get('enigmaExtension_urls', function (result2) {
+      //alert(result2.enigmaExtension_urls);
+    console.log("Done!");
+    // });
+
+    });
+  // });
+}
+
+const url = chrome.runtime.getURL('alexa_10k.json');
+
+fetch(url)
+    .then((response) => response.json()) //assuming file contains json
+    .then((json) => loadUrls(json));
+
+
