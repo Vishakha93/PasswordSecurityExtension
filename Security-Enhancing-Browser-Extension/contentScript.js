@@ -130,11 +130,32 @@ function comparePasswords(result, password, formType)
 	});
 }
 
+function getNextButton(){
+	let nextSpan = document.evaluate("//span[contains(., 'Next')]", document, null, XPathResult.ANY_TYPE, null );
+	let next = nextSpan.iterateNext();
+	return next;
+}
+
 /************** Rules to determine the form type ******************/
 function getFormTypeBySubmitButtonText(formElement)
 {
 	let buttonInFormEl = formElement.querySelector(buttonSelector);
-	let text = buttonInFormEl.value + buttonInFormEl.innerText;
+	let text = ""; 
+	if(!buttonInFormEl) {
+		let next = getNextButton();
+		if(next){
+			text = next.innerText;
+		}else{
+			console.log("YOU NEED TO HANDLE THESE CASES");
+		}
+
+	}else {
+		text = buttonInFormEl.value + buttonInFormEl.innerText;
+	}
+
+	if(text === ""){
+		return FormTypeEnum.UNKOWN;
+	}
 	let logInText = ["log in", "sign in"];
 	for(let i=0; i < logInText.length; i++) {
 		let index = text.toLowerCase().indexOf(logInText[i]);
@@ -143,7 +164,7 @@ function getFormTypeBySubmitButtonText(formElement)
 		}
 	}
 	
-	let signUpText = ["sign up", "create", "join", "register"];
+	let signUpText = ["sign up", "create", "join", "register", "next"];
 	let signUpScore = 0;
 
 	for(let i=0; i < signUpText.length; i++) {
@@ -227,6 +248,18 @@ function addSubmitEventListener(passwordElem) {
 	}
 
 	let submitBtn = closestFormElement.querySelector(buttonSelector);
+	if(!submitBtn) {
+		let text = "";
+		let next = getNextButton();
+		if(next){
+			text = next.innerText;
+			if(text.toLowerCase() === "next"){
+				submitBtn = next;
+			}
+		}else{
+			console.log("YOU NEED TO HANDLE THESE CASES");
+		}
+	}	
 	if(submitBtn && !submitBtn.onclick) {
 		submitBtn.onclick = interceptSubmitAction;
 		submitBtn.onmouseover = isPasswordValid;
