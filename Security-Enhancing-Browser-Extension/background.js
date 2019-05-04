@@ -31,7 +31,16 @@ chrome.runtime.onInstalled.addListener(function(details) {
 
 });
 
-
+/* Referred https://developer.chrome.com/extensions/getstarted */ 
+// chrome.declarativeContent.onPageChanged.removeRules(undefined, function() {
+//     chrome.declarativeContent.onPageChanged.addRules([{
+//     conditions: [new chrome.declarativeContent.PageStateMatcher({
+//       pageUrl: {hostEquals: 'developer.chrome.com'},
+//       })
+//     ],
+//     actions: [new chrome.declarativeContent.ShowPageAction()]
+//   }]);
+// });
 
 /*Referred - https://stackoverflow.com/questions/736513/how-do-i-parse-a-url-into-hostname-and-path-in-javascript*/
 var getLocation = function(href) {
