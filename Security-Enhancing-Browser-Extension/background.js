@@ -10,8 +10,8 @@ chrome.runtime.onMessage.addListener(function(response, sender, sendResponse) {
     // add event listners
 
 let PasswordStatusEnum = {
-  UNVERIFIED: 1,
-  VERIFIED: 2
+  UNVERIFIED: "UNVERIFIED",
+  VERIFIED: "VERIFIED"
 }
 
 /*chrome.webRequest.onCompleted.addListener( 
@@ -40,6 +40,13 @@ var getLocation = function(href) {
     return l;
 };
 
+function sortByKey(array, key) {
+    return array.sort(function(a, b) {
+        var x = a[key]; var y = b[key];
+        return ((x < y) ? -1 : ((x > y) ? 1 : 0));
+    });
+}
+
 chrome.webNavigation.onCommitted.addListener(function (details) {
 
     let NAVIGATE_TIME_IN_MILLIS = 600000;
@@ -50,20 +57,36 @@ chrome.webNavigation.onCommitted.addListener(function (details) {
         let hostName = hostUrl.hostname;
         chrome.storage.local.get({ enigmaPlugin: []}, function (result) {
             let enigmaPlugin = result.enigmaPlugin;
-            let matchedUrls = enigmaPlugin.filter(urlPassword => (urlPassword.url === hostName));
-            let existingData = matchedUrls[0];
+            let allPasswords = enigmaPlugin.filter(urlPassword => (urlPassword.url === hostName));
+
+            //Get the entry with latest password
+            let latestPassword = allPasswords.sort(function(a, b){
+                                    var keyA = new Date(a.storeTime),
+                                        keyB = new Date(b.storeTime);
+                                    // Compare the 2 dates
+                                    if(keyA < keyB) return 1;
+                                    if(keyA > keyB) return -1;
+                                    return 0;
+                                })[0];
+
             let currenTime = Date.now()
-            let timeDiff =  currenTime - existingData.storeTime;
+            let timeDiff =  currenTime - latestPassword.storeTime;
 
             if (timeDiff < NAVIGATE_TIME_IN_MILLIS) {
 
-                existingData.storeTime = currenTime;
-                existingData.status = PasswordStatusEnum.VERIFIED;
+                latestPassword.storeTime = currenTime;
+                latestPassword.status = PasswordStatusEnum.VERIFIED;
+
+                //This deletes all the entries for this website
                 let updatedData = enigmaPlugin.filter(urlPassword => (urlPassword.url != hostName));
-                updatedData.push(existingData);
+
+                //Add the latest entry which we just VERIFIED into the password field
+                updatedData.push(latestPassword);
 
                 chrome.storage.local.set({enigmaPlugin: updatedData}, function () {
                   console.log("Stored in DB");
+
+                  alert("Stored in DB");
                 });
             }
         });

@@ -7,8 +7,8 @@ let FormTypeEnum = {
 }
 
 let PasswordStatusEnum = {
-	UNVERIFIED: 1,
-	VERIFIED: 2
+	UNVERIFIED: "UNVERIFIED",
+	VERIFIED: "VERIFIED"
 }
 /*
 Problems with enigma plugin
@@ -39,22 +39,13 @@ function getMessageHash(message)
 {
   	const encoder = new TextEncoder();
   	const data = encoder.encode(message);
-  	return window.crypto.subtle.digest('SHA-512', data);
+  	return window.crypto.subtle.digest('SHA-256', data);
 }
 
 function storeUrlAndPassword(url, password) 
 {
 	chrome.storage.local.get({ enigmaPlugin: []}, function (result) {
 		let enigmaPlugin = result.enigmaPlugin;
-
-		let verifiedPasswordExists = enigmaPlugin.filter(urlPassword => (urlPassword.url === url && urlPassword.status === PasswordStatusEnum.VERIFIED));
-
-		if (verifiedPasswordExists && verifiedPasswordExists.length > 0) {
-			return;
-		}
-
-
-		enigmaPlugin = enigmaPlugin.filter(urlPassword => (urlPassword.url != url));
 		enigmaPlugin.push({url: url, password: password, storeTime: Date.now(), status: PasswordStatusEnum.UNVERIFIED});
 		
 		chrome.storage.local.set({enigmaPlugin: enigmaPlugin}, function () {
@@ -88,7 +79,7 @@ async function isPasswordValid(passwordElem)
   		let len = result.enigmaPlugin.length;
 		for(i = 0; i < len; i++) 
 		{
-			if(result.enigmaPlugin[i].password === hash && result.enigmaPlugin[i].url != url)
+			if(result.enigmaPlugin[i].status === PasswordStatusEnum.VERIFIED && result.enigmaPlugin[i].password === hash && result.enigmaPlugin[i].url != url)
 			{
 				alert("You are still using password of " +result.enigmaPlugin[i].url+ ". Please choose a different password to continue");
 				flag = 1;
