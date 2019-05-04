@@ -69,6 +69,10 @@ chrome.webNavigation.onCommitted.addListener(function (details) {
                                     return 0;
                                 })[0];
 
+            if(!latestPassword || !latestPassword.storeTime) {
+              return;
+            }
+
             let currenTime = Date.now()
             let timeDiff =  currenTime - latestPassword.storeTime;
 
