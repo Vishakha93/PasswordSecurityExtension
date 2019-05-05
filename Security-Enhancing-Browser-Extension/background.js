@@ -28,7 +28,7 @@ chrome.runtime.onInstalled.addListener(function(details) {
      chrome.storage.local.clear(function() {
 
       });
-
+      refreshWhitelist();
 });
 
 /* Referred https://developer.chrome.com/extensions/getstarted */ 
@@ -131,10 +131,12 @@ function loadUrls(json)
   // });
 }
 
-const url = chrome.runtime.getURL('alexa_10k.json');
 
-fetch(url)
-    .then((response) => response.json()) //assuming file contains json
+function refreshWhitelist()
+{
+  const url = chrome.runtime.getURL('alexa_10k.json');
+  fetch(url)
+    .then((response) => response.json()) 
     .then((json) => loadUrls(json));
-
-
+}
+refreshWhitelist()

@@ -1,9 +1,16 @@
 /************** Alexa-10k support ******************/
 
+/*
+Problems
+1. sweet alert
+2. preventdefault not working for clicks. 
+3. yy.com is whitelisted so swiggyy.com will get whitelisted too. DONE
+4. link gets saved after clicking twice
+5. on Right-click link doesn't gets whitelisted.
+*/
+
 function extractHostname(url) {
     var hostname;
-    //find & remove protocol (http, ftp, etc.) and get hostname
-
     if (url.indexOf("//") > -1) {
         hostname = url.split('/')[2];
     }
@@ -30,9 +37,9 @@ function storeUrl(url)
 		whitelist = [...url_set];
 		
 		chrome.storage.local.set({'enigmaExtension_urls': whitelist}, function () {
-			// chrome.storage.local.get('enigmaExtension_urls', function (result2) {
+			chrome.storage.local.get('enigmaExtension_urls', function (result2) {
 				alert(result2.enigmaExtension_urls);
-			// });
+			});
 
 		});
 	});
@@ -40,6 +47,8 @@ function storeUrl(url)
 
 function matchHostnames(hostname, domain)
 {
+	hostname = "." + hostname;
+	domain = "." + domain;
 	if (hostname.endsWith(domain))
 		return true;
 	else
@@ -50,23 +59,25 @@ function interceptClickEvent()
 {
 	var anchors = document.getElementsByTagName("a");
 	chrome.storage.local.get({ enigmaExtension_urls: []}, function (result) {
-		var whitelist = result.enigmaExtension_urls;
 		for (var i = 0, length = anchors.length; i < length; i++) {
 		  	var anchor = anchors[i];
 		  	var hostname;
 		  	// var size;
 		  	anchor.addEventListener('click', function(event) {
-		    	// `this` refers to the anchor tag that's been clicked
-		    	hostname = extractHostname(this.href);
+	    	// `this` refers to the anchor tag that's been clicked
+	    	hostname = extractHostname(this.href);
+				var whitelist = result.enigmaExtension_urls;
 		    	flag = 1;
-		    	if (flag && whitelist != null)
+		    	if (whitelist == null)
 		    	{
-		    		for(var k = 0; k < whitelist.length; k++)
-		    		{
-		    			if(matchHostnames(hostname, whitelist[k]))
-		    				flag = 0;		
-		    		}
+		    		alert("Whitelist is Null by default!");
+		    		refreshWhitelist();
 		    	}
+	    		for(var k = 0; k < whitelist.length; k++)
+	    		{
+	    			if(matchHostnames(hostname, whitelist[k]))
+	    				flag = 0;		
+	    		}
 		    	if (flag)
 		    	{
 		    		if (confirm(hostname + " doesn't belong to Alexa Top 10k websites!\nStill continue to website?"))
@@ -85,6 +96,6 @@ function interceptClickEvent()
 				console.log(event.target);
 		  	}, true);
 		};
-	});
+    });
 }
 interceptClickEvent();
