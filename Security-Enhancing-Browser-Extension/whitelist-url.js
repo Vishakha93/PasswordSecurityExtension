@@ -2,12 +2,10 @@
 
 /*
 Problems
-1. sweet alert. DONE
-2. preventdefault not working for clicks. 
-3. yy.com is whitelisted so swiggyy.com will get whitelisted too. DONE
-4. link gets saved after clicking twice
-5. on Right-click link doesn't gets whitelisted.
+1. on Right-click link doesn't gets whitelisted. 
 */
+
+let whitelist = []
 
 function extractHostname(url) {
     var hostname;
@@ -28,10 +26,11 @@ function extractHostname(url) {
     return hostname;
 }
 
+
 function storeUrl(url)
 {
 	chrome.storage.local.get({ enigmaExtension_urls: []}, function (result) {
-		let whitelist = result.enigmaExtension_urls;
+		whitelist = result.enigmaExtension_urls;
 		whitelist.push(url);
 		let url_set = new Set(whitelist);
 		whitelist = [...url_set];
@@ -45,6 +44,20 @@ function storeUrl(url)
 	});
 }
 
+
+function initWhitelist()
+{
+	chrome.storage.local.get({ enigmaExtension_urls: []}, function (result) {
+		whitelist = result.enigmaExtension_urls;
+    	if (whitelist.length == 0)
+    	{
+    		console.log("Whitelist is Null by default!");
+    		// refreshWhitelistFG();
+    	}
+	});
+}
+
+
 function matchHostnames(hostname, domain)
 {
 	hostname = "." + hostname;
@@ -55,24 +68,24 @@ function matchHostnames(hostname, domain)
 		return false;
 }
 
+
 function interceptClickEvent() 
 {
 	var anchors = document.getElementsByTagName("a");
+	initWhitelist();
 	chrome.storage.local.get({ enigmaExtension_urls: []}, function (result) {
 		for (var i = 0, length = anchors.length; i < length; i++) {
 		  	var anchor = anchors[i];
 		  	var hostname;
-		  	// var size;
 		  	anchor.addEventListener('click', function(event) {
 	    	// `this` refers to the anchor tag that's been clicked
 	    	hostname = extractHostname(this.href);
-			var whitelist = result.enigmaExtension_urls;
-	    	flag = 1;
-	    	if (whitelist == null)
+	    	if (whitelist.length == 0)
 	    	{
-	    		console.log("Whitelist is Null by default!");
-	    		refreshWhitelist();
+	    		console.log("shouldn't happen!");
+	    		whitelist = result.enigmaExtension_urls;
 	    	}
+	    	flag = 1;
     		for(var k = 0; k < whitelist.length; k++)
     		{
     			if(matchHostnames(hostname, whitelist[k]))
@@ -81,8 +94,12 @@ function interceptClickEvent()
 	    	if (flag)
 	    	{
 	    		event.preventDefault();
+	   //  		var name = "Stack Overflow";
+				// var content = document.createElement('div');
+			 //    content.innerHTML = 'Hello <strong>'+ name +'</strong>';
+			 	// var titleStr = "<u>" + hostname + "</u> not in Alexa Top 10k websites!"
 				swal({
-				  title: "'" + hostname + "' not in Alexa Top 10k!",
+				  title: "'" + hostname + "' is not in Alexa Top 10k websites!",
 				  text: "Still Continue?",
 				  icon: "warning",
 				  buttons: {
@@ -92,7 +109,7 @@ function interceptClickEvent()
 				      value: "skip",
 				    },
 				    skip: {
-				    	text: "Allow always",
+				    	text: "Mark website safe",
 				    	value: "whitelist",
 				    },
 				  },

@@ -139,4 +139,3 @@ function refreshWhitelist()
     .then((response) => response.json()) 
     .then((json) => loadUrls(json));
 }
-refreshWhitelist()
