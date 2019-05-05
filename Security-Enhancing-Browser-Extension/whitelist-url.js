@@ -2,7 +2,7 @@
 
 /*
 Problems
-1. sweet alert
+1. sweet alert. DONE
 2. preventdefault not working for clicks. 
 3. yy.com is whitelisted so swiggyy.com will get whitelisted too. DONE
 4. link gets saved after clicking twice
@@ -66,34 +66,53 @@ function interceptClickEvent()
 		  	anchor.addEventListener('click', function(event) {
 	    	// `this` refers to the anchor tag that's been clicked
 	    	hostname = extractHostname(this.href);
-				var whitelist = result.enigmaExtension_urls;
-		    	flag = 1;
-		    	if (whitelist == null)
-		    	{
-		    		alert("Whitelist is Null by default!");
-		    		refreshWhitelist();
-		    	}
-	    		for(var k = 0; k < whitelist.length; k++)
-	    		{
-	    			if(matchHostnames(hostname, whitelist[k]))
-	    				flag = 0;		
-	    		}
-		    	if (flag)
-		    	{
-		    		if (confirm(hostname + " doesn't belong to Alexa Top 10k websites!\nStill continue to website?"))
-		    		{
-		    			if (confirm("Add " + hostname + " to list of safe sites?"))
-		    			{
-							storeUrl(hostname);
-		    			}
-		    		}
-		    		else
-		    		{
-			    		event.preventDefault();
-		    		}
-		    	}
-	    		// Log the clicked element in the console
-				console.log(event.target);
+			var whitelist = result.enigmaExtension_urls;
+	    	flag = 1;
+	    	if (whitelist == null)
+	    	{
+	    		console.log("Whitelist is Null by default!");
+	    		refreshWhitelist();
+	    	}
+    		for(var k = 0; k < whitelist.length; k++)
+    		{
+    			if(matchHostnames(hostname, whitelist[k]))
+    				flag = 0;		
+    		}
+	    	if (flag)
+	    	{
+	    		event.preventDefault();
+				swal({
+				  title: "'" + hostname + "' not in Alexa Top 10k!",
+				  text: "Still Continue?",
+				  icon: "warning",
+				  buttons: {
+				    cancel: "Cancel",
+				    catch: {
+				      text: "Allow this once",
+				      value: "skip",
+				    },
+				    skip: {
+				    	text: "Allow always",
+				    	value: "whitelist",
+				    },
+				  },
+				})
+				.then((value) => {
+				  let closest_link = event.target.closest('a');
+				  switch (value) {
+				    case "whitelist":
+				    	storeUrl(hostname);
+						window.open(closest_link.href,"_self");
+				    	break;				 
+				    case "skip":
+						window.open(closest_link.href,"_self");
+				    	break;				 
+				    default:
+				  }
+				});
+	    	}
+    		// Log the clicked element in the console
+			
 		  	}, true);
 		};
     });
