@@ -1,8 +1,5 @@
 ********************************************** WHAT WE HAVE ************************************************************
-# Password Security Extenstion
-Chrome Plugin to avoid reuse of passwords
-
-## UniqPass
+# UniqPass
 A Security Enhancing Browser Extension
 
 Every day, millions of users and websites are joining the internet. Users avail common services like online shopping, social connectivity, banking transactions, booking cabs, flights, hotels, appointments, etc on these websites. Often, users actions on these websites involve establishing an online identity, expressing their personal opinions, sharing sensitive documents and transferring money. This flow of sensitive information and money on the web is what makes security so important for the web. Modern browsers employ a wide range of security mechanisms to protect users information against malicious websites. Unfortunately, these protections are not sufficient and therefore users are often exposed to malicious and unwanted content. To help users secure their information on the internet, we present UniqPass - 
