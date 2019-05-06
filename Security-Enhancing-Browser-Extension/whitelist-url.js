@@ -35,7 +35,7 @@ function storeUrl(url)
 		
 		chrome.storage.local.set({'enigmaExtension_urls': whitelist}, function () {
 			chrome.storage.local.get('enigmaExtension_urls', function (result2) {
-				alert(result2.enigmaExtension_urls);
+				// alert(result2.enigmaExtension_urls);
 			});
 
 		});
