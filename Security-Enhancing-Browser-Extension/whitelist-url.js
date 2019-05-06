@@ -121,9 +121,7 @@ function interceptClickEvent()
 				    default:
 				  }
 				});
-	    	}
-    		// Log the clicked element in the console
-			
+	    	}			
 		  	}, true);
 		};
     });
