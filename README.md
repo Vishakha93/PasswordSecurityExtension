@@ -1,4 +1,3 @@
-********************************************** WHAT WE HAVE ************************************************************
 # UniqPass
 A Security Enhancing Browser Extension
 
