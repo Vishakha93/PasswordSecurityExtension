@@ -78,49 +78,52 @@ function interceptClickEvent()
 		  	anchor.addEventListener('click', function(event) {
 	    	// `this` refers to the anchor tag that's been clicked
 	    	hostname = extractHostname(this.href);
-	    	if (whitelist.length == 0)
+	    	if (hostname)
 	    	{
-	    		console.log("shouldn't happen!");
-	    		whitelist = result.enigmaExtension_urls;
-	    	}
-	    	flag = 1;
-    		for(var k = 0; k < whitelist.length; k++)
-    		{
-    			if(matchHostnames(hostname, whitelist[k]))
-    				flag = 0;		
-    		}
-	    	if (flag)
-	    	{
-	    		event.preventDefault();
-				swal({
-				  title: "'" + hostname + "' is not in Alexa Top 10k websites!",
-				  text: "Still Continue?",
-				  icon: "warning",
-				  buttons: {
-				    cancel: "Cancel",
-				    catch: {
-				      text: "Allow this once",
-				      value: "skip",
-				    },
-				    skip: {
-				    	text: "Mark website safe",
-				    	value: "whitelist",
-				    },
-				  },
-				})
-				.then((value) => {
-				  let closest_link = event.target.closest('a');
-				  switch (value) {
-				    case "whitelist":
-				    	storeUrl(hostname);
-						window.open(closest_link.href,"_self");
-				    	break;				 
-				    case "skip":
-						window.open(closest_link.href,"_self");
-				    	break;				 
-				    default:
-				  }
-				});
+		    	if (whitelist.length == 0)
+		    	{
+		    		console.log("shouldn't happen!");
+		    		whitelist = result.enigmaExtension_urls;
+		    	}
+		    	flag = 1;
+	    		for(var k = 0; k < whitelist.length; k++)
+	    		{
+	    			if(matchHostnames(hostname, whitelist[k]))
+	    				flag = 0;		
+	    		}
+		    	if (flag)
+		    	{
+		    		event.preventDefault();
+					swal({
+					  title: "'" + hostname + "' is not in Alexa Top 10k websites!",
+					  text: "Still Continue?",
+					  icon: "warning",
+					  buttons: {
+					    cancel: "Cancel",
+					    catch: {
+					      text: "Allow this once",
+					      value: "skip",
+					    },
+					    skip: {
+					    	text: "Mark website safe",
+					    	value: "whitelist",
+					    },
+					  },
+					})
+					.then((value) => {
+					  let closest_link = event.target.closest('a');
+					  switch (value) {
+					    case "whitelist":
+					    	storeUrl(hostname);
+							window.open(closest_link.href,"_self");
+					    	break;				 
+					    case "skip":
+							window.open(closest_link.href,"_self");
+					    	break;				 
+					    default:
+					  }
+					});
+				}
 	    	}			
 		  	}, true);
 		};
