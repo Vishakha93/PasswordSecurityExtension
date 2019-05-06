@@ -1,13 +1,11 @@
 /************** Alexa-10k support ******************/
 
-/*
-Problems
-1. on Right-click link doesn't gets whitelisted. 
-*/
-
 let whitelist = []
 
 function extractHostname(url) {
+	/*
+	Referred https://stackoverflow.com/questions/8498592/extract-hostname-name-from-string/16934798
+	*/
     var hostname;
     if (url.indexOf("//") > -1) {
         hostname = url.split('/')[2];
@@ -20,9 +18,9 @@ function extractHostname(url) {
     hostname = hostname.split(':')[0];
     //find & remove "?"
     hostname = hostname.split('?')[0];
-    console.log(hostname);
+    // console.log(hostname);
     hostname = hostname.replace('www.','');
-    console.log(hostname);
+    // console.log(hostname);
     return hostname;
 }
 
@@ -94,10 +92,6 @@ function interceptClickEvent()
 	    	if (flag)
 	    	{
 	    		event.preventDefault();
-	   //  		var name = "Stack Overflow";
-				// var content = document.createElement('div');
-			 //    content.innerHTML = 'Hello <strong>'+ name +'</strong>';
-			 	// var titleStr = "<u>" + hostname + "</u> not in Alexa Top 10k websites!"
 				swal({
 				  title: "'" + hostname + "' is not in Alexa Top 10k websites!",
 				  text: "Still Continue?",
