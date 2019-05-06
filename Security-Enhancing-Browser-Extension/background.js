@@ -98,8 +98,6 @@ chrome.webNavigation.onCommitted.addListener(function (details) {
 
                 chrome.storage.local.set({enigmaPlugin: updatedData}, function () {
                   console.log("Stored in DB");
-
-                  alert("Stored in DB");
                 });
             }
         });

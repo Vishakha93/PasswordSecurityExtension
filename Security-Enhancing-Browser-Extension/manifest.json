@@ -17,16 +17,7 @@
   }
 ], 
 
-"options_page": "options.html",
- "page_action": {
-      "default_popup": "popup.html",
-      "default_icon": {
-        "16": "images/popup-icon.png",
-        "32": "images/popup-icon.png",
-        "48": "images/popup-icon.png",
-        "128": "images/popup-icon.png"
-      }
-    },
+
 
  "icons": {
       "16": "images/popup-icon.png",
@@ -35,5 +26,5 @@
       "128": "images/popup-icon.png"
     },
  "permissions": ["webRequest","<all_urls>","webRequestBlocking", "webNavigation", "activeTab", "tabs", "declarativeContent", "storage"],
- "web_accessible_resources": ["modal.html", "thirdparty/jquery.min.js", "alexa_10k.json"]
+ "web_accessible_resources": ["thirdparty/jquery.min.js", "alexa_10k.json"]
 }

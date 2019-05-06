@@ -51,14 +51,7 @@ function storeUrlAndPassword(url, password)
 		enigmaPlugin.push({url: url, password: password, storeTime: Date.now(), status: PasswordStatusEnum.UNVERIFIED});
 		
 		chrome.storage.local.set({enigmaPlugin: enigmaPlugin}, function () {
-			chrome.storage.local.get('enigmaPlugin', function (result2) {
-
-				swal(JSON.stringify(result2.enigmaPlugin));
-				//document.getElementById("modalHeader").innerHTML = "Password Reuse Warning";
-				//document.getElementById("modalBody").innerHTML = "<h2>You reused a password</h2><h2>Please fix</h2><<h2>Please fix</h2>";
-				//document.getElementById("myBtn").click();
-
-			});
+			console.log("Setting the unverified password");
 		});
 	});
 }
@@ -94,7 +87,7 @@ async function isPasswordValid()
 		{
 			if(result.enigmaPlugin[i].status === PasswordStatusEnum.VERIFIED && result.enigmaPlugin[i].password === hash && result.enigmaPlugin[i].url != url)
 			{
-				swal("You are still using password of " +result.enigmaPlugin[i].url+ ". Please choose a different password to continue");
+				swal("Planning to submit? You are still reusing a password which was used on a different website. Clearing the password!");
 				passwordElem.value = '';
 				flag = 1;
 			}
@@ -130,10 +123,10 @@ function comparePasswords(result, password, formType)
 			if(result.enigmaPlugin[i].status === PasswordStatusEnum.VERIFIED && result.enigmaPlugin[i].password === hash && result.enigmaPlugin[i].url != url) {
 
 				if(formType === FormTypeEnum.LOGIN) {
-					swal("You are using password of " +result.enigmaPlugin[i].url+ " on " + url);
+					swal("You are using password of " +result.enigmaPlugin[i].url+ " on " + url + ". Make sure you are on the correct website");
 				}
 				else {
-					swal("This is the password of " + result.enigmaPlugin[i].url + " website. Please choose a different password.");
+					swal("You are reusing a password which was used on a different website. Please choose a different one.");
 				}
 				
 			}
@@ -157,7 +150,7 @@ function getFormTypeBySubmitButtonText(formElement)
 		if(next){
 			text = next.innerText;
 		}else{
-			console.log("YOU NEED TO HANDLE THESE CASES");
+			console.log("Submit button not part of the form and span element not found");
 		}
 
 	}else {
@@ -265,11 +258,11 @@ function addSubmitEventListener(passwordElem) {
 		let next = getNextButton();
 		if(next){
 			text = next.innerText;
-			if(text.toLowerCase() === "next"){
+			if(text && text.toLowerCase() === "next"){
 				submitBtn = next;
 			}
 		}else{
-			console.log("YOU NEED TO HANDLE THESE CASES");
+			console.log("Submit Button not in the form and not a span element");
 		}
 	}	
 	if(submitBtn && !submitBtn.onclick) {
