@@ -1,12 +1,17 @@
-# Color Change Plugin
+# UniqPass Extension
 
-1. Color change plugin created using Chrome Extension Getting Started Tutorial - https://developers.chrome.com/extensions/getstarted
+How to set up UniqPass?
 
-2. Enhanced the plugin to include a form. Data is persisted and retrieved using chrome storage API.
+	* Download the master-dev branch code from our repo - 
+https://github.com/Vishakha93/PasswordSecurityExtension
 
-To use the code :
+	* In case you are using git, use the following command -
+		git clone --single-branch --branch master-dev https://github.com/Vishakha93/PasswordSecurityPlugin.git
 
-1) Download the files in a directory
-2) Visit chrome://extensions in your browser and ensure that the Developer mode checkbox in the top right-hand corner is checked
-3) Click Load unpacked extension and select the directory in which your extension files live.
-4) Test it by clicking a new tab.
+	* cd PasswordSecurityExtension/Security-Enhancing-Browser-Extension/
+
+	* Go to chrome, switch the developer mode on at chrome://extensions and load this folder 
+
+	* Once the extension is loaded, you will see a lock icon and can start testing different websites 
+
+	
