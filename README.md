@@ -15,3 +15,15 @@ UniqPass detects whether the user is trying to login to a website with the passw
 ### Modify link-clicking behavior
 Some security researchers have argued that most users would be protected if the software would stop them from visiting unpopular websites. Your extension should inspect all links in all web pages visited and for those links that are leading the user outside of the Alexa top 10K websites, the user should be warned if they click on that link. The user should have the option to dismiss the block once (i.e. be allowed to visit that website) or forever (i.e. ask the extension not to bother her next time she visits that particular website).
 
+## How to set up UniqPass?
+  * Download the master-dev branch code from our repo -
+    https://github.com/Vishakha93/PasswordSecurityExtension
+    In case you are using git, use the following command -
+    git clone --single-branch --branch master-dev
+    git@github.com:Vishakha93/PasswordSecurityExtension.git
+  * To view the code,
+     cd PasswordSecurityExtension/Security-Enhancing-Browser-Extension/
+  * Go to chrome, switch the developer mode on at chrome://extensions and load the
+     code folder
+  * Once the extension is loaded, you will see a lock icon and can start testing different
+     websites
